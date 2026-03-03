@@ -1,0 +1,60 @@
+# 📖 Habit Economy: User Manual
+
+Welcome to **Habit Economy**! Level up your life by turning your daily routines into a gamified adventure. Build habits, earn XP, compete with friends, and unlock epic rewards.
+
+---
+
+## 🚀 Getting Started
+
+### Accessing the App
+1.  Open [http://localhost:3000](http://localhost:3000) in your browser.
+2.  **Demo Access**: Use the following credentials to explore a pre-populated account:
+    *   **Username**: `demo`
+    *   **Password**: `password123`
+3.  **New User**: Click **"Create one"** on the login screen to register your own account.
+
+---
+
+## ✅ Core Features
+
+### 1. Daily Habits
+*   **Create Habits**: Go to **"My Habits"** and click **"+ New Habit"**. Choose an icon, color, and XP reward.
+*   **Track Progress**: On your **Dashboard**, click any habit card to mark it as complete.
+*   **Rewards**: Completing habits earns you **XP** (to level up) and **Coins** (to spend in the shop).
+
+### 2. Analytics
+*   Monitor your consistency through the **Analytics** page.
+*   View your **Weekly Completion Rate** and **Monthly Overview**.
+*   Identify your "Best Habit" based on completion frequency.
+
+---
+
+## 🎮 Gamification & Progression
+
+### leveling & XP
+*   Earn XP by completing habits and challenges.
+*   Reach higher levels to unlock new rewards and bragging rights on the leaderboard.
+*   A **Streak Bonus** is awarded if you complete ALL your active habits in a single day!
+
+### Achievements & Rewards
+*   **Achievements**: Unlock medals for milestones like "Streak Starter" or "Century Run". View these in the **Achievements** tab.
+*   **Rewards Shop**: Spend your coins on cosmetic upgrades (New Icons, Themes) or power-ups (Streak Shields).
+
+---
+
+## 🤝 Social Interaction
+
+### Friends & Leaderboard
+*   **Add Friends**: Search for friends by username in the **Friends** tab.
+*   **Compete**: See how you rank against the community in the **Leaderboard** (filter by XP, Streaks, or Coins).
+
+### Challenges
+*   **Duel a Friend**: Go to **Challenges** and select a friend to challenge.
+*   **Track the Match**: See who can complete the most days of a specific habit within the time limit. The winner takes home extra XP and Coins!
+
+---
+
+## 💡 Pro Tips
+*   🔥 **Don't break the chain!** Your streak reset if you miss a day where you have active habits.
+*   🎯 **Set realistic targets.** Start with 1-2 habits and gradually increase as you level up.
+*   🛡️ **Use Streak Shields.** If you know you'll be busy, buy a shield from the shop to protect your progress.

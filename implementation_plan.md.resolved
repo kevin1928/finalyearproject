@@ -1,0 +1,89 @@
+# Habit Economy: Development Roadmap & Optimization Plan
+
+This plan outlines a phased approach to improve the Habit Economy project, addressing technical debt, enhancing maintainability, and introducing new features to drive user engagement.
+
+## User Review Required
+
+> [!IMPORTANT]
+> **Tech Stack Change**: I recommend moving towards a more modular frontend structure. While keeping it Vanilla JS is possible, a framework like Vite or Next.js would significantly improve the developer experience and performance.
+> [!WARNING]
+> **Database Cleanup**: The `sql.js` dependency appears to be a leftover from a previous iteration and should be removed to reduce bundle size and confusion.
+
+---
+
+## 🚀 Phase 1: Cleanup & Stabilization (Immediate)
+**Goal**: Resolve immediate technical debt and polish the existing experience.
+
+### Technical Cleanup
+#### [MODIFY] [package.json](file:///d:/habit-project/habit-economy/package.json)
+- Remove `sql.js` dependency.
+- Update other dependencies to latest stable versions.
+
+#### [MODIFY] [server.js](file:///d:/habit-project/habit-economy/server.js)
+- Implement a global error handler middleware.
+- Move "Demo User" logic to a separate helper or keep only in [seed.js](file:///d:/habit-project/habit-economy/seed.js).
+
+### UI/UX Polish
+- Ensure all charts are fully responsive.
+- Add subtle sound effects for habit completion (optional, user preference).
+- Improve mobile responsivness for the analytics grid.
+
+---
+
+## 🏗️ Phase 2: Modularity & Scalability (Short-term)
+**Goal**: Refactor the codebase to support future growth.
+
+### Backend Refactoring
+#### [NEW] [Folder Structure](file:///d:/habit-project/habit-economy/routes)
+- Move routes to a `routes/` directory (e.g., `auth.js`, `habits.js`, `social.js`).
+- Create a `controllers/` directory to separate business logic from routing.
+- Move middleware (auth) to a `middleware/` directory.
+
+### Frontend Modernization
+#### [NEW] [Vite Integration](file:///d:/habit-project/habit-economy/vite.config.js)
+- Introduce Vite for a modern build process.
+- Break down [app.js](file:///d:/habit-project/habit-economy/public/js/app.js) into modular JS files (e.g., `auth.js`, `dashboard.js`, `charts.js`).
+- Break down [style.css](file:///d:/habit-project/habit-economy/public/css/style.css) into component-specific CSS files or use CSS modules.
+
+---
+
+## 🎮 Phase 3: Advanced Gamification (Mid-term)
+**Goal**: Increase retention with deeper game mechanics.
+
+### New Features
+- **Daily Quests**: A new section for randomized daily tasks (e.g., "Complete 3 habits before noon").
+- **Leveling Rewards**: Automatically unlock specific badges or titles upon reaching certain levels.
+- **Streak Shield**: Implement logic for the "Streak Shield" reward in [cron.js](file:///d:/habit-project/habit-economy/cron.js).
+- **Global Feed**: A "Recent Activity" feed showing when friends (or global users) complete challenges or reach milestones.
+
+### UI Enhancements
+- **Theme Engine**: Implement the logic to actually apply "Custom Themes" purchased in the rewards shop.
+- **Customizable Avatar**: Allow users to select icons or upload images (partially implemented, can be polished).
+
+---
+
+## 📊 Phase 4: Advanced Social & Analytics (Long-term)
+**Goal**: Build a community and provide deep insights.
+
+### Deep Social Integration
+- **Guilds/Groups**: Allow users to form guilds and compete collectively.
+- **Direct Messaging**: Simple chat functionality between friends.
+- **Social Sharing**: Generated "Progress Cards" for users to share on social media.
+
+### Advanced Analytics
+- **Habit Heatmap**: A GitHub-style contribution graph for each habit.
+- **Predictive Analytics**: Suggestions based on habit patterns (e.g., "You usually miss this habit on Tuesdays, try setting a reminder").
+
+---
+
+## Verification Plan
+
+### Automated Tests
+- **Unit Tests**: Add Jest or Mocha/Chai tests for backend controllers.
+- **Integration Tests**: Test core flows (Auth -> Create Habit -> Complete Habit).
+- `npm test` (to be implemented).
+
+### Manual Verification
+- Verify `sql.js` removal doesn't break anything (it shouldn't as it's not imported).
+- Manually test the new modular route structure for all API endpoints.
+- Test the new "Daily Quests" and "Theme" logic once implemented.

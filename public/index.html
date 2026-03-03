@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Habit Economy - A gamified habit tracking system. Build habits, earn XP, compete with friends, and unlock rewards.">
+  <title>Habit Economy – Gamified Habit Tracking</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <!-- ============ TOAST NOTIFICATION ============ -->
+  <div id="toast-container"></div>
+
+  <!-- ============ AUTH SCREENS ============ -->
+  <div id="auth-screen" class="auth-screen">
+    <div class="auth-bg-orbs">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+    <div class="auth-container">
+      <div class="auth-brand">
+        <div class="brand-icon"><i class="fas fa-trophy"></i></div>
+        <h1>Habit Economy</h1>
+        <p class="brand-tagline">Build habits. Earn rewards. Level up your life.</p>
+      </div>
+
+      <!-- Login Form -->
+      <div id="login-form" class="auth-form">
+        <h2>Welcome Back</h2>
+        <div class="form-group">
+          <label for="login-username">Username or Email</label>
+          <input type="text" id="login-username" placeholder="Enter your username" autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="Enter your password" autocomplete="current-password">
+        </div>
+        <button id="login-btn" class="btn btn-primary btn-full">
+          <span>Sign In</span>
+          <span class="btn-icon"><i class="fas fa-arrow-right"></i></span>
+        </button>
+        <p class="auth-switch">Don't have an account? <a href="#" id="show-register">Create one</a></p>
+        <div class="demo-hint">
+          <span><i class="fas fa-gamepad"></i></span> Demo: <code>demo</code> / <code>password123</code>
+        </div>
+      </div>
+
+      <!-- Register Form -->
+      <div id="register-form" class="auth-form" style="display:none;">
+        <h2>Join the Economy</h2>
+        <div class="form-group">
+          <label for="reg-display-name">Display Name</label>
+          <input type="text" id="reg-display-name" placeholder="Your name">
+        </div>
+        <div class="form-group">
+          <label for="reg-username">Username</label>
+          <input type="text" id="reg-username" placeholder="Choose a username" autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label for="reg-email">Email</label>
+          <input type="email" id="reg-email" placeholder="your@email.com" autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label for="reg-password">Password</label>
+          <input type="password" id="reg-password" placeholder="Min 6 characters" autocomplete="new-password">
+        </div>
+        <button id="register-btn" class="btn btn-primary btn-full">
+          <span>Create Account</span>
+          <span class="btn-icon"><i class="fas fa-rocket"></i></span>
+        </button>
+        <p class="auth-switch">Already have an account? <a href="#" id="show-login">Sign in</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MAIN APP ============ -->
+  <div id="app" class="app" style="display:none;">
+    <!-- Sidebar -->
+    <nav id="sidebar" class="sidebar">
+      <div class="sidebar-brand">
+        <span class="sidebar-logo"><i class="fas fa-trophy"></i></span>
+        <span class="sidebar-title">Habit Economy</span>
+      </div>
+
+      <div class="sidebar-user" id="sidebar-user">
+        <div class="user-avatar" id="sidebar-avatar">D</div>
+        <div class="user-meta">
+          <div class="user-name" id="sidebar-name">Demo User</div>
+          <div class="user-level" id="sidebar-level">Level 1</div>
+        </div>
+      </div>
+
+      <div class="sidebar-xp-bar">
+        <div class="xp-bar-track">
+          <div class="xp-bar-fill" id="sidebar-xp-fill" style="width: 0%"></div>
+        </div>
+        <div class="xp-label"><span id="sidebar-xp">0</span> XP</div>
+      </div>
+
+      <ul class="sidebar-nav">
+        <li><a href="#" class="nav-link active" data-page="dashboard" id="nav-dashboard"><span class="nav-icon"><i
+                class="fas fa-chart-line"></i></span><span>Dashboard</span></a></li>
+        <li><a href="#" class="nav-link" data-page="profile" id="nav-profile"><span class="nav-icon"><i
+                class="fas fa-user-circle"></i></span><span>Profile</span></a></li>
+        <li><a href="#" class="nav-link" data-page="habits" id="nav-habits"><span class="nav-icon"><i
+                class="fas fa-check-circle"></i></span><span>My
+              Habits</span></a></li>
+        <li><a href="#" class="nav-link" data-page="analytics" id="nav-analytics"><span class="nav-icon"><i
+                class="fas fa-chart-bar"></i></span><span>Analytics</span></a></li>
+        <li><a href="#" class="nav-link" data-page="leaderboard" id="nav-leaderboard"><span class="nav-icon"><i
+                class="fas fa-medal"></i></span><span>Leaderboard</span></a></li>
+        <li><a href="#" class="nav-link" data-page="friends" id="nav-friends"><span class="nav-icon"><i
+                class="fas fa-users"></i></span><span>Friends</span></a></li>
+        <li><a href="#" class="nav-link" data-page="challenges" id="nav-challenges"><span class="nav-icon"><i
+                class="fas fa-fist-raised"></i></span><span>Challenges</span></a></li>
+        <li><a href="#" class="nav-link" data-page="rewards" id="nav-rewards"><span class="nav-icon"><i
+                class="fas fa-gift"></i></span><span>Rewards Shop</span></a></li>
+        <li><a href="#" class="nav-link" data-page="achievements" id="nav-achievements"><span class="nav-icon"><i
+                class="fas fa-trophy"></i></span><span>Achievements</span></a></li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="coin-display" id="sidebar-coins">
+          <span class="coin-icon"><i class="fas fa-coins"></i></span>
+          <span class="coin-count">0</span>
+        </div>
+        <button id="logout-btn" class="btn btn-ghost btn-sm">Logout</button>
+      </div>
+    </nav>
+
+    <!-- Mobile Nav Toggle -->
+    <button id="mobile-nav-toggle" class="mobile-nav-toggle"><i class="fas fa-bars"></i></button>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+      <!-- ====== DASHBOARD PAGE ====== -->
+      <section id="page-dashboard" class="page active">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title" id="greeting-title">Good morning! </h1>
+            <p class="page-subtitle">Let's crush today's habits</p>
+          </div>
+          <div class="header-stats">
+            <div class="stat-pill" id="stat-streak">
+              <span class="stat-icon"><i class="fas fa-fire"></i></span>
+              <span class="stat-value">0</span>
+              <span class="stat-label">Streak</span>
+            </div>
+            <div class="stat-pill" id="stat-level">
+              <span class="stat-icon"><i class="fas fa-star"></i></span>
+              <span class="stat-value">1</span>
+              <span class="stat-label">Level</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="stats-grid" id="stats-grid">
+          <div class="stat-card stat-xp">
+            <div class="stat-card-icon"><i class="fas fa-bolt"></i></div>
+            <div class="stat-card-info">
+              <div class="stat-card-value" id="dash-xp">0</div>
+              <div class="stat-card-label">Total XP</div>
+            </div>
+          </div>
+          <div class="stat-card stat-coins">
+            <div class="stat-card-icon"><i class="fas fa-coins"></i></div>
+            <div class="stat-card-info">
+              <div class="stat-card-value" id="dash-coins">0</div>
+              <div class="stat-card-label">Coins</div>
+            </div>
+          </div>
+          <div class="stat-card stat-habits">
+            <div class="stat-card-icon"><i class="fas fa-check-circle"></i></div>
+            <div class="stat-card-info">
+              <div class="stat-card-value" id="dash-completed">0</div>
+              <div class="stat-card-label">Completed Today</div>
+            </div>
+          </div>
+          <div class="stat-card stat-total">
+            <div class="stat-card-icon"><i class="fas fa-clipboard-list"></i></div>
+            <div class="stat-card-info">
+              <div class="stat-card-value" id="dash-total-habits">0</div>
+              <div class="stat-card-label">Total Completions</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Today's Habits -->
+        <div class="section-header">
+          <h2>Today's Habits</h2>
+          <div class="progress-ring-container" id="daily-progress-container">
+            <div class="progress-ring" id="daily-progress-ring">
+              <svg viewBox="0 0 100 100">
+                <circle class="progress-bg" cx="50" cy="50" r="42" />
+                <circle class="progress-fill" cx="50" cy="50" r="42" id="progress-circle" />
+              </svg>
+              <div class="progress-text" id="progress-text">0%</div>
+            </div>
+          </div>
+        </div>
+        <div class="habits-list" id="dashboard-habits-list">
+          <div class="loading-spinner">Loading habits...</div>
+        </div>
+
+        <!-- Weekly Overview -->
+        <div class="section-header" style="margin-top: 32px;">
+          <h2>This Week</h2>
+          <button class="btn btn-ghost btn-sm" onclick="navigateTo('analytics')">
+            <span>View All</span>
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+        <div class="chart-card dashboard-chart-card">
+          <div class="chart-wrapper">
+            <canvas id="dashboard-chart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====== PROFILE PAGE ====== -->
+      <section id="page-profile" class="page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">User Profile <i class="fas fa-user-circle"></i></h1>
+            <p class="page-subtitle">View your progress and account details</p>
+          </div>
+        </div>
+
+        <div class="profile-container">
+          <!-- Profile Card -->
+          <div class="profile-card-premium">
+            <div class="profile-banner"></div>
+            <div class="profile-info-main">
+              <div class="profile-avatar-large" id="profile-avatar-display">D</div>
+              <div class="profile-identity">
+                <h2 id="profile-display-name">Demo User</h2>
+                <p id="profile-username">@demo</p>
+                <div class="profile-level-badge">
+                  <i class="fas fa-crown"></i> Level <span id="profile-level">1</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="profile-stats-row">
+              <div class="p-stat">
+                <span class="p-stat-value" id="profile-xp">0</span>
+                <span class="p-stat-label">Total XP</span>
+              </div>
+              <div class="p-stat">
+                <span class="p-stat-value" id="profile-coins">0</span>
+                <span class="p-stat-label">Coins</span>
+              </div>
+              <div class="p-stat">
+                <span class="p-stat-value" id="profile-streak-current">0</span>
+                <span class="p-stat-label">Current Streak</span>
+              </div>
+              <div class="p-stat">
+                <span class="p-stat-value" id="profile-streak-longest">0</span>
+                <span class="p-stat-label">Best Streak</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-grid">
+            <!-- Account Settings -->
+            <div class="profile-settings-card">
+              <h3>Account Settings</h3>
+              <form id="profile-update-form">
+                <div class="form-group">
+                  <label for="profile-edit-name">Display Name</label>
+                  <input type="text" id="profile-edit-name" placeholder="Enter display name">
+                </div>
+                <div class="form-group">
+                  <label for="profile-edit-email">Email Address</label>
+                  <input type="email" id="profile-edit-email" placeholder="Enter email">
+                </div>
+                <div class="form-group">
+                  <label for="profile-edit-avatar">Avatar URL</label>
+                  <input type="text" id="profile-edit-avatar" placeholder="https://example.com/image.png">
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">
+                  <span>Save Changes</span>
+                  <i class="fas fa-save"></i>
+                </button>
+              </form>
+            </div>
+
+            <!-- More Stats / Info -->
+            <div class="profile-details-card">
+              <h3>Journey Details</h3>
+              <div class="detail-item">
+                <span class="detail-icon"><i class="fas fa-calendar-alt"></i></span>
+                <div class="detail-info">
+                  <span class="detail-label">Member Since</span>
+                  <span class="detail-value" id="profile-member-since">-</span>
+                </div>
+              </div>
+              <div class="detail-item">
+                <span class="detail-icon"><i class="fas fa-check-double"></i></span>
+                <div class="detail-info">
+                  <span class="detail-label">Total Habit Completions</span>
+                  <span class="detail-value" id="profile-total-completions">0</span>
+                </div>
+              </div>
+              <div class="detail-item">
+                <span class="detail-icon"><i class="fas fa-clock"></i></span>
+                <div class="detail-info">
+                  <span class="detail-label">Last Active</span>
+                  <span class="detail-value" id="profile-last-active">Just now</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====== HABITS PAGE ====== -->
+      <section id="page-habits" class="page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">My Habits <i class="fas fa-check-circle"></i></h1>
+            <p class="page-subtitle">Manage and track your daily habits</p>
+          </div>
+          <button id="add-habit-btn" class="btn btn-primary">
+            <span>+ New Habit</span>
+          </button>
+        </div>
+
+        <!-- Add Habit Modal -->
+        <div id="add-habit-modal" class="modal" style="display:none;">
+          <div class="modal-overlay"></div>
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2>Create New Habit</h2>
+              <button class="modal-close" id="close-habit-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label>Habit Name</label>
+                <input type="text" id="habit-name-input" placeholder="e.g., Morning Meditation">
+              </div>
+              <div class="form-group">
+                <label>Description</label>
+                <input type="text" id="habit-desc-input" placeholder="What does this involve?">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Icon</label>
+                  <div class="icon-picker" id="icon-picker">
+                    <span class="icon-option selected" data-icon="fas fa-star"><i class="fas fa-star"></i></span>
+                    <span class="icon-option" data-icon="fas fa-spa"><i class="fas fa-spa"></i></span>
+                    <span class="icon-option" data-icon="fas fa-book"><i class="fas fa-book"></i></span>
+                    <span class="icon-option" data-icon="fas fa-dumbbell"><i class="fas fa-dumbbell"></i></span>
+                    <span class="icon-option" data-icon="fas fa-tint"><i class="fas fa-tint"></i></span>
+                    <span class="icon-option" data-icon="fas fa-laptop-code"><i class="fas fa-laptop-code"></i></span>
+                    <span class="icon-option" data-icon="fas fa-running"><i class="fas fa-running"></i></span>
+                    <span class="icon-option" data-icon="fas fa-palette"><i class="fas fa-palette"></i></span>
+                    <span class="icon-option" data-icon="fas fa-music"><i class="fas fa-music"></i></span>
+                    <span class="icon-option" data-icon="fas fa-pen-nib"><i class="fas fa-pen-nib"></i></span>
+                    <span class="icon-option" data-icon="fas fa-apple-whole"><i class="fas fa-apple-whole"></i></span>
+                    <span class="icon-option" data-icon="fas fa-bed"><i class="fas fa-bed"></i></span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Color</label>
+                  <div class="color-picker" id="color-picker">
+                    <span class="color-option selected" data-color="#6C5CE7" style="background:#6C5CE7"></span>
+                    <span class="color-option" data-color="#00B894" style="background:#00B894"></span>
+                    <span class="color-option" data-color="#E17055" style="background:#E17055"></span>
+                    <span class="color-option" data-color="#0984E3" style="background:#0984E3"></span>
+                    <span class="color-option" data-color="#FDCB6E" style="background:#FDCB6E"></span>
+                    <span class="color-option" data-color="#E84393" style="background:#E84393"></span>
+                    <span class="color-option" data-color="#00CEC9" style="background:#00CEC9"></span>
+                    <span class="color-option" data-color="#636E72" style="background:#636E72"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Category</label>
+                  <select id="habit-category-input">
+                    <option value="general">General</option>
+                    <option value="health">Health</option>
+                    <option value="fitness">Fitness</option>
+                    <option value="wellness">Wellness</option>
+                    <option value="learning">Learning</option>
+                    <option value="productivity">Productivity</option>
+                    <option value="social">Social</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>XP Reward</label>
+                  <input type="number" id="habit-xp-input" value="10" min="1" max="100">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-ghost" id="cancel-habit-btn">Cancel</button>
+              <button class="btn btn-primary" id="save-habit-btn">Create Habit</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="habits-grid" id="habits-page-list">
+          <div class="loading-spinner">Loading habits...</div>
+        </div>
+      </section>
+
+      <!-- ====== ANALYTICS PAGE ====== -->
+      <section id="page-analytics" class="page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Analytics <i class="fas fa-chart-bar"></i></h1>
+            <p class="page-subtitle">Track your progress over time</p>
+          </div>
+          <div class="analytics-summary" id="analytics-summary">
+            <div class="summary-card">
+              <div class="summary-icon"><i class="fas fa-bullseye"></i></div>
+              <div class="summary-info">
+                <div class="summary-value" id="summary-avg-completion">0%</div>
+                <div class="summary-label">Avg. Completion</div>
+              </div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-icon"><i class="fas fa-trophy"></i></div>
+              <div class="summary-info">
+                <div class="summary-value" id="summary-best-habit">-</div>
+                <div class="summary-label">Best Habit</div>
+              </div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-icon"><i class="fas fa-calendar-check"></i></div>
+              <div class="summary-info">
+                <div class="summary-value" id="summary-total-done">0</div>
+                <div class="summary-label">Total Completed</div>
+              </div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-icon" style="color:var(--accent-danger)"><i class="fas fa-fire"></i></div>
+              <div class="summary-info">
+                <div class="summary-value" id="summary-longest-streak">0</div>
+                <div class="summary-label">Longest Streak</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="analytics-grid">
+            <div class="chart-card">
+              <h3>Weekly Completion Rate</h3>
+              <div class="chart-wrapper">
+                <canvas id="weekly-chart"></canvas>
+              </div>
+            </div>
+            <div class="chart-card">
+              <h3>Monthly Overview</h3>
+              <div class="chart-wrapper">
+                <canvas id="monthly-chart"></canvas>
+              </div>
+            </div>
+            <div class="chart-card chart-card-full">
+              <h3>Habit Performance</h3>
+              <div id="habit-analytics-list" class="habit-analytics-list"></div>
+            </div>
+          </div>
+      </section>
+
+      <!-- ====== LEADERBOARD PAGE ====== -->
+      <section id="page-leaderboard" class="page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Leaderboard <i class="fas fa-medal"></i></h1>
+            <p class="page-subtitle">See how you rank against others</p>
+          </div>
+          <div class="leaderboard-filters">
+            <button class="filter-btn active" data-type="xp" id="filter-xp">XP</button>
+            <button class="filter-btn" data-type="streak" id="filter-streak">Streak</button>
+            <button class="filter-btn" data-type="coins" id="filter-coins">Coins</button>
+            <button class="filter-btn" data-type="completions" id="filter-completions">Completions</button>
+          </div>
+        </div>
+        <div class="leaderboard-table" id="leaderboard-list">
+          <div class="loading-spinner">Loading leaderboard...</div>
+        </div>
+      </section>
+
+      <!-- ====== FRIENDS PAGE ====== -->
+      <section id="page-friends" class="page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Friends <i class="fas fa-users"></i></h1>
+            <p class="page-subtitle">Connect and compete with friends</p>
+          </div>
+        </div>
+        <div class="friends-section">
+          <div class="add-friend-bar">
+            <input type="text" id="add-friend-input" placeholder="Search username to add...">
+            <button class="btn btn-primary" id="add-friend-btn">Add Friend</button>
+          </div>
+          <div class="friend-requests" id="friend-requests-container" style="display:none;">
+            <h3>Friend Requests</h3>
+            <div id="friend-requests-list"></div>
+          </div>
+          <h3>Your Friends</h3>
+          <div class="friends-list" id="friends-list">
+            <div class="loading-spinner">Loading friends...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====== CHALLENGES PAGE ====== -->
+      <section id="page-challenges" class="page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Challenges <i class="fas fa-fist-raised"></i></h1>
+            <p class="page-subtitle">Challenge friends to habit duels</p>
+          </div>
+          <button id="create-challenge-btn" class="btn btn-primary">
+            <span>+ New Challenge</span>
+          </button>
+        </div>
+
+        <!-- Create Challenge Modal -->
+        <div id="challenge-modal" class="modal" style="display:none;">
+          <div class="modal-overlay"></div>
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2>Create Challenge</h2>
+              <button class="modal-close" id="close-challenge-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label>Challenge a Friend (username)</label>
+                <input type="text" id="challenge-user-input" placeholder="Enter their username">
+              </div>
+              <div class="form-group">
+                <label>Habit Challenge</label>
+                <input type="text" id="challenge-habit-input" placeholder="e.g., Exercise daily">
+              </div>
+              <div class="form-group">
+                <label>Description</label>
+                <input type="text" id="challenge-desc-input" placeholder="Challenge details...">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Duration (days)</label>
+                  <input type="number" id="challenge-days-input" value="7" min="1" max="90">
+                </div>
+                <div class="form-group">
+                  <label>XP Reward</label>
+                  <input type="number" id="challenge-xp-input" value="100" min="10" max="1000">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-ghost" id="cancel-challenge-btn">Cancel</button>
+              <button class="btn btn-primary" id="send-challenge-btn">Send Challenge</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="challenges-list" id="challenges-list">
+          <div class="loading-spinner">Loading challenges...</div>
+        </div>
+      </section>
+
+      <!-- ====== REWARDS PAGE ====== -->
+      <section id="page-rewards" class="page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Rewards Shop <i class="fas fa-gift"></i></h1>
+            <p class="page-subtitle">Spend your hard-earned coins</p>
+          </div>
+          <div class="coin-display-large" id="rewards-coins">
+            <span class="coin-icon"><i class="fas fa-coins"></i></span>
+            <span class="coin-count">0</span>
+            <span class="coin-label">coins</span>
+          </div>
+        </div>
+        <div class="rewards-grid" id="rewards-list">
+          <div class="loading-spinner">Loading rewards...</div>
+        </div>
+      </section>
+
+      <!-- ====== ACHIEVEMENTS PAGE ====== -->
+      <section id="page-achievements" class="page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Achievements <i class="fas fa-trophy"></i></h1>
+            <p class="page-subtitle">Unlock milestones on your journey</p>
+          </div>
+        </div>
+        <div class="achievements-grid" id="achievements-list">
+          <div class="loading-spinner">Loading achievements...</div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- XP Popup Animation -->
+  <div id="xp-popup" class="xp-popup" style="display:none;">
+    <span class="xp-popup-text">+10 XP</span>
+  </div>
+
+  <!-- Level Up Modal -->
+  <div id="level-up-modal" class="level-up-modal" style="display:none;">
+    <div class="level-up-content">
+      <div class="level-up-icon"><i class="fas fa-star"></i></div>
+      <h2>Level Up!</h2>
+      <p class="level-up-level" id="level-up-text">Level 2</p>
+      <p class="level-up-sub">Keep up the amazing work!</p>
+      <button class="btn btn-primary" id="level-up-close">Continue</button>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+
+</html>
